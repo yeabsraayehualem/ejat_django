@@ -1,0 +1,14 @@
+**/*.pyc
+**/migrations/
+__pycache__/
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.mo
+*.swp
+*.swo
+*.bak
+*.tmp
+*.DS_Store
+*.egg-info/
