@@ -23,3 +23,14 @@ class GetAttendancesView(UserView):
         )
         serializer = AttendanceSerializer(attendance)
         return Response(serializer.data)
+
+class AllMyAttendandancesView(UserView):
+    
+    def get(self, request):
+        attendances = Attendance.objects.filter(name=request.user).order_by('-id')
+        data = [{
+            'id': attendance.id,
+            'status': "present" if attendance.status == 'p' else "absent",
+            'date': attendance.date.strftime("%Y-%m-%d")
+        } for attendance in attendances]
+        return Response(data)
