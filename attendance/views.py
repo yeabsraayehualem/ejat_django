@@ -9,8 +9,11 @@ class GetAttendancesView(UserView):
     
     def get(self, request):
         attendances = Attendance.objects.filter(name=request.user)
-        serializer = AttendanceSerializer(attendances, many=True)
-        return Response(serializer.data)
+        data = {
+            "present": attendances.filter(status='p').count(),
+            "absent": attendances.filter(status='a').count(),
+        }
+        return Response(data)
     
     def post(self, request):
         # data = request.data
