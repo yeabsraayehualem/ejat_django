@@ -18,8 +18,15 @@ class GetAttendancesView(UserView):
     
     def post(self, request):
         data = request.data
-        print(data)
-        print(request.user)
+        # print(data)
+        # print(request.user)
+        attendance = Attendance.objects.filter(name=request.user, date=timezone.now().date())
+        if attendance:
+            return Response({
+                "status":"success",
+                "message": "You have already marked your attendance"
+            })
+
         attendance = Attendance.objects.create(
             name=request.user,
             status='p'
