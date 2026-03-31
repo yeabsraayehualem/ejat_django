@@ -1,3 +1,4 @@
+from rest_framework.views import APIView
 from django.shortcuts import render
 from rest_framework.response import Response
 from attendance.models import Attendance
@@ -16,7 +17,9 @@ class GetAttendancesView(UserView):
         return Response(data)
     
     def post(self, request):
-        # data = request.data
+        data = request.data
+        print(data)
+        print(request.user)
         attendance = Attendance.objects.create(
             name=request.user,
             status='p'
