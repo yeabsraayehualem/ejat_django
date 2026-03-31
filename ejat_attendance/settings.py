@@ -41,8 +41,14 @@ INSTALLED_APPS = [
     "attendance",
     "rest_framework",
     'corsheaders',
+    "core",
+    "django_crontab",
 
    
+]
+
+CRONJOBS = [
+    ('0 20 * * 5', 'core.views.mark_attendance'),
 ]
 
 REST_FRAMEWORK = {
