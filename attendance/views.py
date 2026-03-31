@@ -1,10 +1,11 @@
+from datetime import datetime
 from rest_framework.views import APIView
 from django.shortcuts import render
 from rest_framework.response import Response
 from attendance.models import Attendance
 from attendance.serializers import AttendanceSerializer
 from users.helper_views import UserView
-
+from datetime import datetime
 # Create your views here.
 class GetAttendancesView(UserView):
     
@@ -20,7 +21,7 @@ class GetAttendancesView(UserView):
         data = request.data
         # print(data)
         # print(request.user)
-        attendance = Attendance.objects.filter(name=request.user, date=timezone.now().date())
+        attendance = Attendance.objects.filter(name=request.user, date=datetime.now().date())
         if attendance:
             return Response({
                 "status":"success",
