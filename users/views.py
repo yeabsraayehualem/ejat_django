@@ -10,8 +10,31 @@ from rest_framework.response import Response
 class JWTAuthCustom(TokenObtainPairView):
     serializer_class = MyTokenSerializer
     
-    
-    
+
+def check_user(request):
+    if request.method == 'POST':
+        data = request.data
+        print(data)
+        user = Account.objects.get(phone=data.get("phone"))
+        if not user:
+            return Response({"message": "User does not exist"}, status=404)
+        if not user.last_login:
+            return Response({"message": "User has no last login","login":False,"user_id":user.id}, status=200)
+        return Response({"login":True}, status=200)
+    return Response({"message":"GET method not allowed"},status=400)
+
+def set_password(request):
+    if request.method == 'POST':
+        data = request.data
+        user = Account.objects.get(phone=data.get("phone"))
+        if not user:
+            return Response({"message": "User does not exist"}, status=404)
+        user.set_password(data.get("password"))
+        user.save()
+        return Response({"login":True}, status=200)
+
+
+    return Response({"message":"GET method not allowed"},status=400)
 class GetDashboardDataView(AdminView):
 
     def get(self, request):

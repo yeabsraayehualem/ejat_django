@@ -4,6 +4,8 @@ from . import views
 
 
 urlpatterns = [
+    path("api/init/", views.check_user),
+    path("api/set-password/", views.set_password),
     path('api/login/', views.JWTAuthCustom.as_view(), name='token_obtain_pair'),
     path('api/admin/dashboard/', views.GetDashboardDataView.as_view(), name='dashboard_data'),
     path('api/admin/users/', views.UserDataView.as_view(), name='user_data'),
