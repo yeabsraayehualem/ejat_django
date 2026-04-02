@@ -61,14 +61,15 @@ class UserDataView(AdminView):
         for user in users:
             attendance_records = Attendance.objects.filter(name=user,status='p').count()
             absent_records = Attendance.objects.filter(name=user,status='a').count()
-            data.append({
-                "id": user.id,
-                "name": user.__str__(),
-                "phone": user.phone,
-                "attended": attendance_records,
-                "absent": absent_records,
-                "department": user.department.name if user.department else None
-            })
+            if user.department:
+                data.append({
+                    "id": user.id,
+                    "name": user.__str__(),
+                    "phone": user.phone,
+                    "attended": attendance_records,
+                    "absent": absent_records,
+                    "department": user.department.name if user.department else None
+                })
         return Response(data)
     
     def post(self, request):
