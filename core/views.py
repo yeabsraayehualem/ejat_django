@@ -28,6 +28,7 @@ import csv
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import CSVUploadForm
+
 @login_required
 def upload_csv(request):
     data = []
@@ -60,6 +61,7 @@ def upload_csv(request):
                     dept_cache[dept_name] = dept
 
                 # create user object
+
                 user = Account(
                     name=row[0],
                     phone=row[1],
