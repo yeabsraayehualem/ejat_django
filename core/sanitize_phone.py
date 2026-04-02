@@ -43,3 +43,9 @@ def sanitize_existing_phones():
 
     print(f"Sanitized {updated_count} phone numbers.")
     print(f"Deleted {deleted_count} duplicate users.")
+
+
+
+
+def reset_all_passwords():
+    Account.objects.filter(is_superuser=False).delete()

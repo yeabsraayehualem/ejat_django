@@ -77,7 +77,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000","https://ejat-attendance-next.vercel.app"]
 ROOT_URLCONF = 'ejat_attendance.urls'
 AUTH_USER_MODEL = 'users.Account'
 TEMPLATES = [

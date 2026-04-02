@@ -5,36 +5,51 @@ from .models import Account,Department, SecularTitle, SpiritualTitle
 from attendance.models import Attendance
 from rest_framework.response import Response
 
+from django.views.decorators.csrf import csrf_exempt
 
 
 class JWTAuthCustom(TokenObtainPairView):
     serializer_class = MyTokenSerializer
-    
 
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def check_user(request):
-    if request.method == 'POST':
-        data = request.data
-        print(data)
-        user = Account.objects.get(phone=data.get("phone"))
-        if not user:
-            return Response({"message": "User does not exist"}, status=404)
-        if not user.last_login:
-            return Response({"message": "User has no last login","login":False,"user_id":user.id}, status=200)
-        return Response({"login":True}, status=200)
-    return Response({"message":"GET method not allowed"},status=400)
+    data = request.data
+    phone = data.get("phone")
 
+    try:
+        user = Account.objects.get(phone=phone)
+    except Account.DoesNotExist:
+        return Response({"message": "User does not exist"}, status=404)
+
+    if not user.password or len(user.password) < 3:
+        return Response({"login": False, "message": "User has no last login", "user_id": user.id}, status=200)
+
+    return Response({"login": True}, status=200)
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def set_password(request):
-    if request.method == 'POST':
-        data = request.data
-        user = Account.objects.get(phone=data.get("phone"))
-        if not user:
-            return Response({"message": "User does not exist"}, status=404)
-        user.set_password(data.get("password"))
-        user.save()
-        return Response({"login":True}, status=200)
+    data = request.data
+    phone = data.get("phone")
+    password = data.get("password")
 
+    try:
+        user = Account.objects.get(phone=phone)
+    except Account.DoesNotExist:
+        return Response({"message": "User does not exist"}, status=404)
 
-    return Response({"message":"GET method not allowed"},status=400)
+    user.set_password(password)
+    user.save()
+    return Response({"login": True}, status=200)
 class GetDashboardDataView(AdminView):
 
     def get(self, request):

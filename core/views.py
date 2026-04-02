@@ -67,7 +67,7 @@ def upload_csv(request):
                     phone=row[1],
                     department=dept,
                 )
-                user.set_password(row[1])
+
                 new_users.append(user)
                 existing_phones.add(row[1])
 
